@@ -1,11 +1,13 @@
 void Main()
 {
+    bool estaArena = false;
+    bool clive = false;
     while (true)
     {
         float[] sens ={
             bc.Lightness(0), bc.Lightness(1), bc.Lightness(2), bc.Lightness(3), bc.Lightness(4), bc.Lightness(5)
         };
-
+        int count = 0;
         //AJUSTE DE CURVAS SUAVES
         Func<int> ajusteFino = () =>
         {
@@ -42,21 +44,22 @@ void Main()
         //LINHAS RETAS
         if (bc.ReturnColor(0) != "PRETO" && bc.ReturnColor(4) != "PRETO")
         {
+            int contador = 0;
             //ANDAR PRA FRENTE
             if (bc.ReturnColor(2) == "PRETO" && !bc.DetectDistance(2, 20, 25))
             {
                 bc.MoveFrontal(170, 170);
             } // AJUSTE 
             else if (bc.ReturnColor(1) == "PRETO")
-            {
-                bc.MoveFrontalAngles(200, 3);
+            {  
+                bc.MoveFrontal(-1000, 1000);
             } // AJUSTE
             else if (bc.ReturnColor(3) == "PRETO")
-            {
-                bc.MoveFrontalAngles(200, -3);
+            {   
+                bc.MoveFrontal(1000, -1000);
             } // FORA DE LINHA [PARADO]
             else
-            {
+            {  
                 bc.MoveFrontal(170, 170);
             }
         }   //DESVIAR DE OBSTACULOS
@@ -96,5 +99,24 @@ void Main()
         {
             curvasDe90(-1, 14, 0);
         }
+        //ANDANDO SEM LINHA
+        else if(bc.ReturnColor(0) == "BRANCO" && bc.ReturnColor(1) == "BRANCO" && bc.ReturnColor(2) == "BRANCO" && bc.ReturnColor(3) == "BRANCO" && bc.ReturnColor(4) == "BRANCO"){
+            count++;
+            bc.Print(count);
+        }
+        // SUBINDO A RAMPA
+        if(bc.Inclination() >  330 && bc.DetectDistance(1, 30, 40)){
+            clive = true;
+        }
+        // ANALIZANDO ESTADO ANTERIOR DO CARRINHO
+        else if (clive && bc.Inclination() == 0){
+            estaArena = true;
+        }
+        bc.Print("II "+ estaArena + " sa " + clive);
+        if(estaArena){
+            bc.MoveFrontalAngles(300, 90);
+            bc.MoveFrontalRotations(-300, 90);
+            bc.MoveFrontalAngles(300, -90);
+        };
     }
 }
