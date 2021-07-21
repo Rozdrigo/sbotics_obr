@@ -1,5 +1,4 @@
-# sBotics_OBR
-olimpíada brasileira de robótica
+# ANOTAÇÕES OLIMPIADA
 
 ### 🚒 OBR - OLIMPIADA BRASILEIRA DE ROBOTICA
 
@@ -11,6 +10,34 @@ d = Direita
 e = Esquerda**
 ```
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4d69283a-4187-48b9-a2d9-264b46365902/Group_4_(2).png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4d69283a-4187-48b9-a2d9-264b46365902/Group_4_(2).png)
+![assets/img1.png](assets/img1.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5b030dd9-d2c1-4e0f-a3aa-af60a0b21e87/Group_5_(1).png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5b030dd9-d2c1-4e0f-a3aa-af60a0b21e87/Group_5_(1).png)
+![assets/img2.png](assets/img2.png)
+
+- [ ]  Voltar na marcação verde dupla;
+- [ ]  Função de start, que procura a alinha assim que o carro inicia;
+- [ ]  Curva de 90° com marcação verde e falha de linha;
+- [ ]  Identificar fim da área de resgate, marcação verde;
+- [ ]  Marcação vermelha, final do percurso. Parar cinco segundos;
+- [ ]  Boas praticas de organização de código;
+- [ ]  Arena de resgate;
+- [ ]  Volte a linha;
+- [ ]  Distinguir objeto de rampa.
+
+### Funções Mortas:
+
+```csharp
+float[] sens = {
+    bc.Lightness(0), bc.Lightness(1), bc.Lightness(2), bc.Lightness(3), bc.Lightness(4), bc.Lightness(5)
+};
+int count = 0;
+//AJUSTE DE CURVAS SUAVES
+Func<int> ajusteFino = () =>
+{
+    float mediana = (sens[1] + sens[2] + 40) / 2;
+    float error = 40 - mediana;
+    bc.MoveFrontal(50 - 15 * error, 50 + 15 * error);
+
+    return 0;
+};
+```
