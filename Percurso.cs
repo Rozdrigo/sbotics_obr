@@ -20,42 +20,18 @@ void Main()
             }
             return 0;
         };
-
+        Func <int, string> quatroCantos = (num) => {
+            while(!(bc.Compass() < 135.5 && bc.Compass() > 134.5)){
+                bc.MoveFrontalAngles(300, 0.1f);
+            }
+            while(!bc.DetectDistance(0, 183, 184)){
+                bc.MoveFrontal(170, 170);
+            }
+            return "as";
+        };
         if (estouArena)
         {
-            bc.MoveFrontalAngles(300, 90);
-
-            if (!bc.Touch(1))
-            {
-                bc.MoveFrontalRotations(-300, 8);
-                bc.MoveFrontalAngles(300, -90);
-            }
-            int cm = 0;
-            while (true)
-            {
-                bc.MoveFrontalAngles(300, ((90 - bc.Compass())));
-                if (!bc.DetectDistance(0, 0, 1))
-                {
-                    cm++;
-                    bc.MoveFrontalRotations(100, 1);
-                    if (bc.DetectDistance(1, 0, 300))
-                    {
-                        for (int i = 300; i > 0; i--)
-                        {
-                            if (!bc.DetectDistance(1, 0, i))
-                            {
-                                linha[cm - 1] = i;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        linha[cm - 1] = 0;
-                    }
-                }
-                bc.Print(string.Join(",", linha));
-            };
+           quatroCantos(0);
         }
         else
         {
@@ -94,7 +70,7 @@ void Main()
                 // FORA DE LINHA [PARADO]
                 else if (bc.Lightness(0) > 40 && bc.Lightness(1) > 40 && bc.Lightness(2) > 40 && bc.Lightness(3) > 40 && bc.Lightness(4) > 40 && bc.Inclination() < 15)
                 {
-                    while (bc.ReturnColor(0) == "BRANCO" && bc.ReturnColor(1) == "BRANCO" && bc.ReturnColor(2) == "BRANCO" && bc.ReturnColor(3) == "BRANCO" && bc.ReturnColor(4) == "BRANCO")
+                    while (bc.ReturnColor(0) == "BRANCO" && bc.ReturnColor(1) == "BRANCO" && bc.ReturnColor(2) == "BRANCO" && bc.ReturnColor(3) == "BRANCO" && bc.ReturnColor(4) == "BRANCO" && !passRampa)
                     {
                         bc.MoveFrontalRotations(170, 1);
                         passosNoVazio++;
