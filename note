@@ -1,0 +1,37 @@
+ int frenteAtras = 1;
+            bc.MoveFrontalAngles(300, 90);
+            if (!bc.Touch(1))
+            {
+                bc.MoveFrontalRotations(-300, 8);
+                bc.MoveFrontalAngles(300, -90);
+                if(bc.DetectDistance(2, 170, 250)){
+                    bc.MoveFrontalAngles(500, -90);
+                    frenteAtras = -1;
+                }
+            }
+            int cm = 0;
+            while (true)
+            {
+                bc.MoveFrontalAngles(300, ((frenteAtras > 0 ? 90 : -360 - bc.Compass())));
+                if (!bc.DetectDistance(0, 0, 1))
+                {
+                    cm++;
+                    bc.MoveFrontalRotations(100 * frenteAtras, 1);
+                    if (bc.DetectDistance(1, 0, 300))
+                    {
+                        for (int i = 300; i > 0; i--)
+                        {
+                            if (!bc.DetectDistance(1, 0, i))
+                            {
+                                linha[cm - 1] = i;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        linha[cm - 1] = 0;
+                    }
+                }
+                bc.Print(string.Join(",", linha));
+            };

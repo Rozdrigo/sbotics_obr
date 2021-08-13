@@ -1,11 +1,12 @@
 void Main()
 {
     int passosNoVazio = 0;
-    int[] linha = new int[102];
+    string[] cantos = {null, null, null, null};
 
     bool estouArena = false;
     bool passRampa = false;
-
+    bc.ActuatorSpeed(150);
+    bc.ActuatorUp(1000);
     while (true)
     {
         // CURVAS 90°
@@ -20,30 +21,37 @@ void Main()
             }
             return 0;
         };
-        Func <int, string> quatroCantos = (num) => {
-            while(!(bc.Compass() < 135.5 && bc.Compass() > 134.5)){
-                bc.MoveFrontalAngles(300, 0.1f);
-            }
-            while(!bc.DetectDistance(0, 183, 184)){
-                bc.MoveFrontal(170, 170);
-            }
-            return "as";
+        Func <int, int> meiaVolta = (num) => {
+            girarParaLinha(1, 0, 4);
+            return 0;
         };
         if (estouArena)
         {
-           quatroCantos(0);
+            bool leituraFeita = false;
+            int cont = 0;
+            bc.Print(string.Join(",", cantos));
+            cantos[0] = "ENTRADA";
+            bc.MoveFrontalAngles(300, 45);
+            bc.MoveFrontalRotations(300, (float)(160/2.3333333333333335));
+            if(cantos[0] != null && cantos[1] != null && cantos[2] != null && cantos[3] != null){
+                leituraFeita = true;
+            }
+            while(!leituraFeita){
+                bc.MoveFrontalAngles(300, 1);
+                if(bc.Compass(0) - bc.Compass(2) > 40 && bc.Compass(0) - bc.Compass(2) < 80){
+                    cantos[cont++];
+                }
+            };
         }
         else
         {
             //DESVIAR DE OBSTACULOS
-            if (bc.DetectDistance(2, 15, 25) && bc.DetectDistance(0, 0, 35) || bc.DetectDistance(2, 15, 25) && !bc.DetectDistance(0, 0, 800))
+            if (bc.DetectDistance(2, 15, 25) && bc.DetectDistance(0, 0, 37) && bc.Inclination() == 0|| bc.DetectDistance(2, 15, 25) && !bc.DetectDistance(0, 0, 800) && bc.Inclination() == 0)
             {
                 float AngAntigo = bc.Compass();
                 bc.MoveFrontalAngles(500, -45);
                 if (!bc.DetectDistance(2, 15, 20))
                 {
-                    bc.ActuatorSpeed(150);
-                    bc.ActuatorUp(1000);
                     bc.MoveFrontalRotations(300, 16);
                     bc.MoveFrontalAngles(300, 45);
                     while (!bc.DetectDistance(1, 0, 30))
@@ -102,15 +110,24 @@ void Main()
                     }
                 };
             }
-
             //MARCAÇÕES VERDES DIREITA
             if (bc.ReturnColor(1) == "VERDE" && bc.ReturnColor(3) != "VERDE")
             {
+                bc.MoveFrontalRotations(300, 0.2f);
+                if(bc.ReturnColor(3) == "VERDE" && bc.ReturnColor(1) == "VERDE"){
+                    meiaVolta(0);
+                }else{
                 girarParaLinha(1, 15, 1);
+                }
             } //MARCAÇÕES VERDES ESQUERDA
             else if (bc.ReturnColor(3) == "VERDE" && bc.ReturnColor(1) != "VERDE")
             {
+                bc.MoveFrontalRotations(300, 0.2f);
+                if(bc.ReturnColor(3) == "VERDE" && bc.ReturnColor(1) == "VERDE"){
+                    meiaVolta(0);
+                }else{
                 girarParaLinha(-1, 15, 1);
+                }
             } // CURVA DE 90 LINHA PRETA DIREITA
             else if (bc.ReturnColor(0) == "PRETO" && bc.ReturnColor(1) == "PRETO" && bc.ReturnColor(3) == "BRANCO" && bc.ReturnColor(4) == "BRANCO")
             {
